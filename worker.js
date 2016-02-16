@@ -32,7 +32,7 @@ module.exports = handler;
 function handler (url, username, token) {
   let path = os.tmpdir() + '/' + urlLib.parse(url, false, true).hostname;
   crawl(url, (err) => {
-    if (err && err.killed !== 8) {
+    if (err && err.code !== 8) {
       return console.error(err);
     }
     github(path, username, token);
