@@ -97,7 +97,8 @@ function request (options, data, callback) {
     res.on('end', () => {
       let result = JSON.parse(body);
       if (res.statusCode >= 300) {
-        throw result.message;
+        // throw result.message;
+        return console.error(result.message);
       }
       callback(result);
     });
