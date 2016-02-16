@@ -14,13 +14,14 @@ const options = {
 const cmd = (process.env.NODE_ENV === 'production') ? '/usr/bin/wget' : '/usr/local/bin/wget';
 
 const args = [
-  '--no-cookies', 
+  '--no-cookies',
   '--timestamping',
-  '--quiet', 
+  '--quiet',
   '--recursive',
-  '--level=10', 
-  '--convert-links', 
-  '--no-parent'
+  '--level=10',
+  '--convert-links',
+  '--no-parent',
+  '--user-agent=Webtography'
 ];
 
 module.exports = handler;

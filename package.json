@@ -2,9 +2,8 @@
   "name": "webtography",
   "version": "1.0.0",
   "description": "Scrape a website via Wget",
-  "main": "worker.js",
   "scripts": {
-    "start": "node worker.js"
+    "start": "node server.js"
   },
   "author": "Jacob Friis Saxberg",
   "license": "ISC"
