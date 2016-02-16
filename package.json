@@ -1,0 +1,11 @@
+{
+  "name": "httrack",
+  "version": "1.0.0",
+  "description": "",
+  "main": "worker.js",
+  "scripts": {
+    "start": "node worker.js"
+  },
+  "author": "",
+  "license": "ISC"
+}
