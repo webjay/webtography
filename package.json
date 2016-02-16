@@ -1,11 +1,11 @@
 {
-  "name": "httrack",
+  "name": "webtography",
   "version": "1.0.0",
-  "description": "",
+  "description": "Scrape a website via Wget",
   "main": "worker.js",
   "scripts": {
     "start": "node worker.js"
   },
-  "author": "",
+  "author": "Jacob Friis Saxberg",
   "license": "ISC"
 }
