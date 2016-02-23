@@ -7,6 +7,8 @@ const worker = require('./worker.js');
 const Port = process.env.PORT || 3000;
 
 function handler (request, response) {
+  response.setHeader('Access-Control-Allow-Origin', '*');
+  response.setHeader('Access-Control-Allow-Methods', 'POST');
   if (request.method === 'POST') {
     var body = '';
     request.on('data', (data) => {
