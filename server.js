@@ -13,6 +13,7 @@ function defaultResponse (response) {
 function handler (request, response) {
   response.setHeader('Access-Control-Allow-Origin', '*');
   response.setHeader('Access-Control-Allow-Methods', 'OPTIONS, POST');
+  response.setHeader('Access-Control-Allow-Headers', 'accept, origin, content-type');
   if (request.method === 'POST') {
     var body = '';
     request.on('data', (data) => {
