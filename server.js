@@ -29,15 +29,16 @@ function handler (request, response) {
         }
       });
       request.on('end', () => {
-        const post = qsParse(body);
-        if (!post.url || !post.username || !post.token) {
+        const headers = request.headers;
+        const data = (headers['content-type'] === 'application/json') ? JSON.parse(body) : qsParse(body);
+        if (!data.url || !data.username || !data.token) {
           response.writeHead(409);
           return defaultResponse(response);
         }
         response.writeHead(201);
-        response.end('I got this: ' + post.url);
-        console.log('Working with', post.url, post.username, '...' + post.token.substr(-5));
-        worker(post.url, post.username, post.token);
+        response.end('I got this: ' + data.url);
+        console.log('Working with', data.url, data.username, '...' + data.token.substr(-5));
+        worker(data.url, data.username, data.token);
       });
       break;
     default:
