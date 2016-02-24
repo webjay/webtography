@@ -2,7 +2,10 @@
 
 const createServer = require('http').createServer;
 const qsParse = require('querystring').parse;
-const worker = require('./worker.js');
+const wget = require('./lib/wget.js');
+const github = require('./lib/github.js');
+const urlParse = require('url').parse;
+const tmpdir = require('os').tmpdir;
 
 const Port = process.env.PORT || 3000;
 
@@ -39,7 +42,13 @@ function handler (request, response) {
         response.writeHead(201);
         response.end('I got this: ' + data.url);
         console.log('Working with', data.url, data.username, '...' + data.token.substr(-5));
-        worker(data.url, data.username, data.token);
+        const dest = tmpdir() + '/' + urlParse(data.url, false, true).hostname;
+        wget(data.url, (err) => {
+          if (err && err.code !== 8) {
+            return console.error(err);
+          }
+          github(dest, data.username, data.token);
+        });
       });
       break;
     default:
