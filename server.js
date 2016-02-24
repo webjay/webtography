@@ -30,7 +30,8 @@ function handler (request, response) {
       });
       request.on('end', () => {
         const headers = request.headers;
-        const data = (headers['content-type'] === 'application/json') ? JSON.parse(body) : qsParse(body);
+        const isJSON = headers['content-type'].split(';')[0] === 'application/json';
+        const data = (isJSON) ? JSON.parse(body) : qsParse(body);
         if (!data.url || !data.username || !data.token) {
           response.writeHead(409);
           return defaultResponse(response);
