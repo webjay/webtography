@@ -47,7 +47,7 @@ function handler (request, response) {
           if (err && err.code !== 8) {
             return console.error(err);
           }
-          github(dest, data.username, data.token);
+          github(dest, data.username, data.token, data.branch);
         });
       });
       break;
