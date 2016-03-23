@@ -41,7 +41,7 @@ function handler (request, response) {
           return defaultResponse(response);
         }
         response.writeHead(201);
-        response.end('I got this: ' + data.url + '\n');
+        response.end('I got this: (' + data.url + '). Now go check your repos.\n');
         const gh = new Github(null, data.username, data.token);
         gh.rateLimit((result) => {
           if (result.rate.remaining < 5) {
