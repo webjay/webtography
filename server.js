@@ -36,7 +36,13 @@ function handler (request, response) {
         const headers = request.headers;
         const isJSON = headers['content-type'].split(';')[0] === 'application/json';
         const data = (isJSON) ? JSON.parse(body) : qsParse(body);
-        if (!data.url || !data.username || !data.token) {
+        const urlObj = urlParse(data.url);
+        if (urlObj.protocol !== 'http:' && urlObj.protocol !== 'https:') {
+          response.writeHead(409);
+          return defaultResponse(response);
+        }
+        const url = urlObj.protocol + '//' + urlObj.hostname + urlObj.pathname;
+        if (!data.username || !data.token) {
           response.writeHead(409);
           return defaultResponse(response);
         }
@@ -51,14 +57,14 @@ function handler (request, response) {
             return console.error('Rate limit', result);
           }
           response.writeHead(201);
-          response.end('I got this: (' + data.url + '). Now go check your repos.\n');
-          console.log('Working with', data.url, data.username, '...' + data.token.substr(-5));
-          const dest = tmpdir() + '/' + urlParse(data.url, false, true).hostname;
-          wget(data.url, (err) => {
+          response.end('I got this: (' + url + '). Now go check your repos.\n');
+          console.log('Working with', url, data.username, '...' + data.token.substr(-5));
+          const dest = tmpdir() + '/' + urlObj.hostname;
+          wget(url, (err) => {
             if (err && err.code !== 8) {
               return console.error(err);
             }
-            console.log('Pushing %s to github.com/%s', data.url, data.username);
+            console.log('Pushing %s to github.com/%s', url, data.username);
             pusher(dest, data.username, data.token, data.branch);
           });
         });
