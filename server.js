@@ -2,8 +2,9 @@
 
 const createServer = require('http').createServer;
 const qsParse = require('querystring').parse;
+const Github = require('./lib/github.js');
 const wget = require('./lib/wget.js');
-const github = require('./lib/github.js');
+const pusher = require('./lib/pusher.js');
 const urlParse = require('url').parse;
 const tmpdir = require('os').tmpdir;
 
@@ -40,15 +41,21 @@ function handler (request, response) {
           return defaultResponse(response);
         }
         response.writeHead(201);
-        response.end('I got this: ' + data.url);
-        console.log('Working with', data.url, data.username, '...' + data.token.substr(-5));
-        const dest = tmpdir() + '/' + urlParse(data.url, false, true).hostname;
-        wget(data.url, (err) => {
-          if (err && err.code !== 8) {
-            return console.error(err);
+        response.end('I got this: ' + data.url + '\n');
+        const gh = new Github(null, data.username, data.token);
+        gh.rateLimit((result) => {
+          if (result.rate.remaining < 5) {
+            return console.error('Rate limit', result);
           }
-          console.log('Pushing %s to github.com/%s', data.url, data.username);
-          github(dest, data.username, data.token, data.branch);
+          console.log('Working with', data.url, data.username, '...' + data.token.substr(-5));
+          const dest = tmpdir() + '/' + urlParse(data.url, false, true).hostname;
+          wget(data.url, (err) => {
+            if (err && err.code !== 8) {
+              return console.error(err);
+            }
+            console.log('Pushing %s to github.com/%s', data.url, data.username);
+            pusher(dest, data.username, data.token, data.branch);
+          });
         });
       });
       break;
