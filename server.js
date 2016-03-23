@@ -40,13 +40,18 @@ function handler (request, response) {
           response.writeHead(409);
           return defaultResponse(response);
         }
-        response.writeHead(201);
-        response.end('I got this: (' + data.url + '). Now go check your repos.\n');
         const gh = new Github(null, data.username, data.token);
         gh.rateLimit((result) => {
+          if (result.rate === undefined) {
+            response.writeHead(401);
+            response.end('Bad credentials');
+            return;
+          }
           if (result.rate.remaining < 5) {
             return console.error('Rate limit', result);
           }
+          response.writeHead(201);
+          response.end('I got this: (' + data.url + '). Now go check your repos.\n');
           console.log('Working with', data.url, data.username, '...' + data.token.substr(-5));
           const dest = tmpdir() + '/' + urlParse(data.url, false, true).hostname;
           wget(data.url, (err) => {
