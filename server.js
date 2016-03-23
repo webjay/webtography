@@ -47,6 +47,7 @@ function handler (request, response) {
           if (err && err.code !== 8) {
             return console.error(err);
           }
+          console.log('Pushing %s to github.com/%s', data.url, data.username);
           github(dest, data.username, data.token, data.branch);
         });
       });
