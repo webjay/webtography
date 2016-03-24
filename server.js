@@ -23,7 +23,7 @@ function handler (request, response) {
       response.end();
       break;
     case 'POST':
-      var body = '';
+      let body = '';
       request.on('data', (data) => {
         body += data;
         // keep it below 1mb
@@ -32,7 +32,7 @@ function handler (request, response) {
           request.connection.destroy();
         }
       });
-      request.on('end', () => {
+      request.on('end', _ => {
         const headers = request.headers;
         const isJSON = headers['content-type'].split(';')[0] === 'application/json';
         const data = (isJSON) ? JSON.parse(body) : qsParse(body);
@@ -76,6 +76,12 @@ function handler (request, response) {
   }
 }
 
-createServer(handler).listen(Port, () => {
+const server = createServer(handler);
+
+server.listen(Port, _ => {
   console.log('HTTP server listening on port', Port);
+});
+
+process.on('SIGTERM', _ => {
+  server.close();
 });
