@@ -60,10 +60,11 @@ function handler (request, response) {
           response.end('I got this: (' + url + '). Now go check your repos.\n');
           console.log('Working with', url, data.username, '...' + data.token.substr(-5));
           const dest = tmpdir() + '/' + urlObj.hostname;
-          wget(url, (err) => {
+          wget(url, (err, stdout, stderr) => {
             if (err && err.code !== 8) {
-              return console.error(err);
+              return console.error(err, stderr);
             }
+            console.log(stdout);
             console.log('Pushing %s to github.com/%s', url, data.username);
             pusher(dest, data.username, data.token, data.branch);
           });
