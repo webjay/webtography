@@ -2,6 +2,7 @@
   "name": "webtography",
   "version": "1.0.0",
   "description": "Scrape a website via Wget",
+  "homepage": "https://webjay.github.io/webtography/",
   "scripts": {
     "start": "node server.js"
   },
